@@ -42,11 +42,6 @@ repost:
 
 
 
-## 前言
-
-- 本笔记将会随博客同步更新：
-- [JavaEE系统学习笔记 - 某人的小栈 (fordece.cn)](https://www.fordece.cn/posts/javaee系统学习笔记/)
-
 ## JavaSE
 
 ### classpath
@@ -64,7 +59,7 @@ java -classpath out/production/HelloJava edu.whu.Hello
 
 ### signature
 
-- 参数类型和函数名确定一个函数，和返回值没关系
+-  `参数类型` 和 `函数名` 确定一个函数，和返回值没关系
 - 例如：`test(String,int)`就是一个 signature
 
 
@@ -84,6 +79,10 @@ java -classpath out/production/HelloJava edu.whu.Hello
 #### Error
 
 - 不可处理的错误
+
+### 集合类及其工具
+
+
 
 ### 内置泛型类特性
 
@@ -187,10 +186,57 @@ System.out.println("isEqual = " + isEqual); // isEqual = false
 
 #### Stream
 
+- 流式编程、内部迭代。
+- 生成流通常用以下四种方法：
 
+```java
+// 前两种是使用 Collection 接口的两个默认方法
+default Stream<E> stream() {
+    return StreamSupport.stream(spliterator(), false);
+}
+default Stream<E> parallelStream() { // 并行
+    return StreamSupport.stream(spliterator(), true);
+}
+// 后两种是使用工具类生成：
+Arrays.stream(T[] array);
+Stream.of(T... values);
+```
 
-#### 函数式编程
+- 看一个简单直观的栗子
 
+```java
+package com.forDece;
 
+import java.util.Arrays;
+
+public class Main {
+    public static void main(String[] args) {
+        Arrays.asList(1, 2, 3, 4, 5, 6, 7)
+                .parallelStream().map(num -> num * 2)
+                .filter(num -> num > 3)
+                .limit(6)
+                .forEach(System.out::println);
+    }
+}
+```
+
+![image-20230917220646261](https://img.fordece.cn/imgs/2023/09/image-20230917220646261.png)
+
+- 菜鸟教程提到： Stream 提供了内部迭代的方式， 通过访问者模式(Visitor)实现
+
+#### 函数式接口
+
+- 带有`@FunctionalInterface`注解的接口
+- 一句话：可被隐式转换为 lambda 表达式的接口
+
+```java
+@FunctionalInterface
+interface GreetingService 
+{
+    void sayMessage(String message);
+}
+```
+
+- jdk8 提供的函数式接口：[Java 8 函数式接口 | 菜鸟教程 (runoob.com)](https://www.runoob.com/java/java8-functional-interfaces.html)
 
 #### Base64
