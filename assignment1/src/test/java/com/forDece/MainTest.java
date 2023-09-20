@@ -1,21 +1,22 @@
 package com.forDece;
 
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.function.Executable;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class MainTest {
 
     @BeforeAll
-    static void init(){
+    static void init() {
 
     }
 
     @AfterAll
-    static void end(){
+    static void end() {
 
     }
-
 
 
     // 测试运行顺序是不确定的
@@ -35,5 +36,22 @@ public class MainTest {
     @Test
     void testA() {
         assertEquals(1, 1);
+    }
+
+    // 异常的测试写法：
+    @Test
+    void testNegative() {
+        // 传入一个线程类？
+        assertThrows(IllegalArgumentException.class, new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                throw new IllegalArgumentException("yes");
+
+            }
+        });
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            throw new IllegalArgumentException("hh");
+        });
     }
 }
