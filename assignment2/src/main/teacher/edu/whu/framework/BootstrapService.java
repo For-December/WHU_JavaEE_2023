@@ -16,20 +16,22 @@ public class BootstrapService {
 
     /**
      * 从属性文件中找到启动类，并调用初始化方法
+     *
      * @param propFile 属性文件
      * @throws BootstrapException 启动错误
      */
     public static Object start(String propFile) throws BootstrapException {
         Properties properties = loadProperties(propFile);
-        Class clazz = getBootstrapClass(properties);
-        Object obj=creatObject(clazz);
-        invokeInitMethod(clazz,obj);
+        Class<?> clazz = getBootstrapClass(properties);
+        Object obj = creatObject(clazz);
+        invokeInitMethod(clazz, obj);
         return obj;
     }
 
 
     /**
      * 加载属性文件
+     *
      * @param propFile 属性文件
      * @return 属性表
      * @throws BootstrapException 数据文件读取异常
@@ -49,11 +51,12 @@ public class BootstrapService {
 
     /**
      * 从属性中获取类
+     *
      * @param properties 属性
      * @return 类
      * @throws BootstrapException 属性读取的异常
      */
-    private static Class getBootstrapClass(Properties properties) throws BootstrapException {
+    private static Class<?> getBootstrapClass(Properties properties) throws BootstrapException {
         String bootstrapClass = properties.getProperty("bootstrapClass");
         if (bootstrapClass == null) {
             throw new BootstrapException(BootstrapException.ErrorType.PROP_READ_ERROR, "在属性文件中没有设置bootstrapClass");
@@ -67,41 +70,50 @@ public class BootstrapService {
 
     /**
      * 创建类的对象
+     *
      * @param clazz 类
      * @return 对象
      * @throws BootstrapException 创建对象失败的异常
      */
     private static Object creatObject(Class<?> clazz) throws BootstrapException {
         try {
-            return clazz.newInstance();
-        } catch (InstantiationException e) {
-            throw new BootstrapException(BootstrapException.ErrorType.CREATE_OBJECT_ERROR, "创建对象失败：请检查是否有无参构造函数");
+//            return clazz.newInstance(); // 该方法被弃用，用以下实现代替
+            return clazz.getDeclaredConstructor().newInstance();
+        } catch (InstantiationException | NoSuchMethodException | InvocationTargetException e) {
+            throw new BootstrapException(BootstrapException.ErrorType.CREATE_OBJECT_ERROR,
+                    "创建对象失败：请检查是否有无参构造函数");
         } catch (IllegalAccessException e) {
-            throw new BootstrapException(BootstrapException.ErrorType.CREATE_OBJECT_ERROR, "创建对象失败：类不能是抽象类，构造函数不能为私有."+e.getMessage());
+            throw new BootstrapException(BootstrapException.ErrorType.CREATE_OBJECT_ERROR,
+                    "创建对象失败：类不能是抽象类，构造函数不能为私有." + e.getMessage());
         }
     }
 
 
-
     /**
      * 调用所有标注了@InitMethod的方法
+     *
      * @param clazz 类
-     * @param obj 对象
+     * @param obj   对象
      */
-    private static void invokeInitMethod(Class clazz,Object obj) throws BootstrapException {
+    private static void invokeInitMethod(Class<?> clazz, Object obj) throws BootstrapException {
         for (Method method : clazz.getDeclaredMethods()) {
-            if (!method.isAnnotationPresent(InitMethod.class)) {continue;}
-            if (method.getParameterCount() > 0) {
-                throw new BootstrapException(BootstrapException.ErrorType.INITMETHOD_ERROR,"带参数的方法不允许标注@InitMethod");
+            if (!method.isAnnotationPresent(InitMethod.class)) {
+                continue;
             }
-            invokeMethod(Modifier.isStatic(method.getModifiers()) ?clazz:obj, method);
+            if (method.getParameterCount() > 0) {
+                throw new BootstrapException(
+                        BootstrapException.ErrorType.INIT_METHOD_ERROR,
+                        "带参数的方法不允许标注@InitMethod");
+            }
+            invokeMethod(Modifier.isStatic(method.getModifiers()) ? clazz : obj, method);
         }
     }
 
 
     /**
      * 调用方法
-     * @param obj 对象，如果是静态方法，obj为null
+     *
+     * @param obj    对象，如果是静态方法，obj为null
      * @param method 方法
      * @throws BootstrapException 调用方法失败
      */
@@ -110,7 +122,7 @@ public class BootstrapService {
             method.setAccessible(true);
             method.invoke(obj);
         } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new BootstrapException(BootstrapException.ErrorType.METHOD_CALL_ERROR, "调用方法失败："+e.getMessage());
+            throw new BootstrapException(BootstrapException.ErrorType.METHOD_CALL_ERROR, "调用方法失败：" + e.getMessage());
         }
     }
 

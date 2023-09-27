@@ -10,7 +10,7 @@ public class MyClass {
     String status = "offline";
 
     @InitMethod
-    public void init(){
+    public void init() {
         this.status = "online";
         System.out.println("init()方法被调用");
     }
