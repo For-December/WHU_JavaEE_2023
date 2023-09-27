@@ -8,6 +8,7 @@ public class MyClass {
     @InitMethod
     public void init() {
         System.out.println("init method was invoked successfully!");
+        this.name = "jack";
     }
 
     public void func1() {
