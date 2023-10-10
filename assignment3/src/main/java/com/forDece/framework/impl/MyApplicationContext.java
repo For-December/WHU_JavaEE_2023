@@ -1,23 +1,20 @@
 package com.forDece.framework.impl;
 
 import com.forDece.framework.MiniApplicationContext;
-import com.forDece.framework.convert.Converter;
 import com.forDece.framework.convert.impl.StringToNumber;
 import com.forDece.framework.exception.BeansException;
-import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
-import org.dom4j.io.XMLWriter;
 
-import javax.swing.text.html.Option;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 public class MyApplicationContext implements MiniApplicationContext {
 
@@ -58,35 +55,50 @@ public class MyApplicationContext implements MiniApplicationContext {
 
     }
 
-    public static synchronized void addBeans(String clazzId, String clazzName, Map<String, String> params) {
+    public static void insertValue(
+            final Method declaredMethod,
+            final Object obj,
+            final Map.Entry<String, String> entry
+    ) {
+        try {
+            assert (1 == declaredMethod.getParameterCount());
+
+            // 字符串类型
+            if (declaredMethod.getParameterTypes()[0] == String.class) {
+                declaredMethod.invoke(obj, entry.getValue());
+                return;
+            }
+            // 数字类型
+            if (Number.class.isAssignableFrom(declaredMethod.getParameterTypes()[0])) {
+                declaredMethod.invoke(obj,
+                        new StringToNumber<>(declaredMethod.getParameterTypes()[0])
+                                .parseNumber(entry.getValue()));
+                return;
+            }
+            // 其他自定义类型
+            throw new RuntimeException("无法进行类型转换，请自行实现 String 到该类转换器！");
+
+
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static synchronized void addBeans(
+            String clazzId,
+            String clazzName,
+            Map<String, String> params
+    ) {
         try {
             Class<?> myClass = Class.forName(clazzName);
             var obj = myClass.getDeclaredConstructor().newInstance();
 
             for (Method declaredMethod : myClass.getDeclaredMethods()) {
                 String name = declaredMethod.getName();
-                if (name.contains("set")) {
-                    params.entrySet().stream()
-                            .filter(entry -> name.toLowerCase().contains(entry.getKey().toLowerCase()))
-                            .forEach(entry -> {
-                                try {
-                                    assert (1 == declaredMethod.getParameterCount());
-                                    if (declaredMethod.getParameterTypes()[0] == entry.getKey().getClass()) {
-                                        declaredMethod.invoke(obj, entry.getValue());
-                                    } else if (Number.class.isAssignableFrom(declaredMethod.getParameterTypes()[0])) {
-                                        declaredMethod.invoke(obj,
-                                                new StringToNumber<>(declaredMethod.getParameterTypes()[0])
-                                                        .parseNumber(entry.getValue()));
-                                    } else {
-                                        throw new RuntimeException("无法进行类型转换！");
-                                    }
-
-
-                                } catch (IllegalAccessException | InvocationTargetException e) {
-                                    throw new RuntimeException(e);
-                                }
-                            });
-                }
+                if (!name.contains("set")) continue;
+                params.entrySet().stream()
+                        .filter(entry -> name.toLowerCase().contains(entry.getKey().toLowerCase()))
+                        .forEach(entry -> insertValue(declaredMethod, obj, entry));
             }
             beans.put(clazzId, obj);
         } catch (ClassNotFoundException e) {
@@ -103,8 +115,9 @@ public class MyApplicationContext implements MiniApplicationContext {
         return beans.get(name);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <T> T getBean(String name, Class<T> requiredType) throws BeansException {
-        return null;
+        return (T) beans.get(name);
     }
 }
