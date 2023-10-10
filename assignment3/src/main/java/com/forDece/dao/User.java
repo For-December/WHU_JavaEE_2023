@@ -2,7 +2,10 @@ package com.forDece.dao;
 
 public class User {
     private String name;
-    private Integer num;
+    private Integer id;
+    private Double score;
+
+
 
     public String getName() {
         return name;
@@ -12,19 +15,29 @@ public class User {
         this.name = name;
     }
 
-    public int getNum() {
-        return num;
+    public int getId() {
+        return id;
     }
 
-    public void setNum(Integer num) {
-        this.num = num;
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+
+    public Double getScore() {
+        return score;
+    }
+
+    public void setScore(Double score) {
+        this.score = score;
     }
 
     @Override
     public String toString() {
         return "User{" +
                 "name='" + name + '\'' +
-                ", num=" + num +
+                ", id=" + id +
+                ", score=" + score +
                 '}';
     }
 }

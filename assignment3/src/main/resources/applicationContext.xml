@@ -3,19 +3,20 @@
 
     <!--2.配置bean-->
     <!--bean标签标示配置bean，id属性标示给bean起名字，class属性定义bean的类（具体类）-->
-    <bean id="bookDao" class="com.forDece.dao.impl.BookDaoImpl"/>
+<!--    <bean id="bookDao" class="com.forDece.dao.impl.BookDaoImpl"/>-->
 
-    <bean id="bookService" class="com.forDece.service.impl.BookServiceImpl">
-        <!--7.配置server与dao的关系-->
-        <!--property标签表示配置当前bean的属性
-        name属性表示配置哪一个具体的属性
-        ref属性表示参照哪一个bean-->
-        <!--        调用set方法注入bookDao-->
-<!--        <property name="bookDao" ref="bookDao"/>-->
-    </bean>
-    <bean id="myClass" class="com.forDece.dao.User">
+<!--    <bean id="bookService" class="com.forDece.service.impl.BookServiceImpl">-->
+<!--        &lt;!&ndash;7.配置server与dao的关系&ndash;&gt;-->
+<!--        &lt;!&ndash;property标签表示配置当前bean的属性-->
+<!--        name属性表示配置哪一个具体的属性-->
+<!--        ref属性表示参照哪一个bean&ndash;&gt;-->
+<!--        &lt;!&ndash;        调用set方法注入bookDao&ndash;&gt;-->
+<!--&lt;!&ndash;        <property name="bookDao" ref="bookDao"/>&ndash;&gt;-->
+<!--    </bean>-->
+    <bean id="myUser" class="com.forDece.dao.User">
         <property name="name" val="jack"/>
         <property name="id" val="12"/>
+        <property name="score" val="99.9999"/>
     </bean>
 
 </beans>

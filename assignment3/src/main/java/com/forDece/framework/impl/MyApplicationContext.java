@@ -34,7 +34,7 @@ public class MyApplicationContext implements MiniApplicationContext {
             Element rootElement = document.getRootElement();
             getElements(rootElement);
 
-            System.out.println(beans.get("user"));
+//            System.out.println(beans.get("user"));
 
         } catch (IOException | DocumentException e) {
             throw new RuntimeException(e);
@@ -45,8 +45,6 @@ public class MyApplicationContext implements MiniApplicationContext {
 
     public static void getElements(Element element) {
         for (Element bean : element.elements("bean")) {
-            System.out.println(bean.attribute("id").getData());
-            System.out.println(bean.attribute("class").getData());
 
             Map<String, String> param = new HashMap<>();
             for (Element property : bean.elements("property")) {
