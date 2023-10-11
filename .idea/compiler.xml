@@ -7,17 +7,33 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="assignment2" />
         <module name="assignment1" />
-        <module name="student3" />
-        <module name="teacher3" />
+        <module name="teacher (2)" />
+        <module name="teacher (1)" />
+        <module name="student (1)" />
+      </profile>
+      <profile name="Annotation profile for student" enabled="true">
+        <sourceOutputDir name="../student3/target/generated-sources/annotations" />
+        <sourceTestOutputDir name="../student3/target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="student (2)" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="assignment-3" target="1.8" />
       <module name="assignment-3 (1) (com.forDece)" target="17" />
       <module name="assignment-3 (2) (org.example)" target="1.8" />
+      <module name="assignment2" target="17" />
+      <module name="assignment2 (1)" target="17" />
+      <module name="assignment2 (2)" target="17" />
       <module name="assignment3" target="17" />
+      <module name="student" target="17" />
+      <module name="student2" target="17" />
+      <module name="student3" target="17" />
+      <module name="teacher" target="17" />
+      <module name="teacher (1) (com.forDece)" target="17" />
+      <module name="teacher (2) (org.example)" target="1.8" />
+      <module name="teacher3" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
