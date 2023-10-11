@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+    <bean id="myUser" class="com.forDece.dao.User">
+        <property name="name" val="jack"/>
+        <property name="id" val="12"/>
+        <property name="score" val="99.9999"/>
+    </bean>
+
+</beans>

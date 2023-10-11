@@ -17,16 +17,12 @@ public class TestFramework {
     }
 
     @Test
-    public void testCreateUser() {
+    public void testCreateUser() throws BeansException {
         System.out.println("Hello world!");
         MiniApplicationContext ctx = new MyApplicationContext("/applicationContext.xml");
-        User user;
-        try {
-            user = ctx.getBean("myUser", User.class);
-            System.out.println(user);
-        } catch (BeansException e) {
-            throw new RuntimeException(e);
-        }
+        User user = ctx.getBean("myUser", User.class);
+        System.out.println(user);
+
 
         assertEquals("jack", user.getName());
         assertEquals(12, user.getId());
