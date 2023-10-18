@@ -7,18 +7,20 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="student4" />
         <module name="assignment1" />
-        <module name="student3" />
+        <module name="teacher4" />
         <module name="student2" />
         <module name="teacher3" />
         <module name="teacher2" />
+        <module name="student4" />
+        <module name="student3" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="assignment-3" target="1.8" />
       <module name="assignment-3 (1) (com.forDece)" target="17" />
       <module name="assignment-3 (2) (org.example)" target="1.8" />
+      <module name="assignment-4" target="1.8" />
       <module name="assignment2" target="17" />
       <module name="assignment2 (1)" target="17" />
       <module name="assignment2 (2)" target="17" />
@@ -37,7 +39,9 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="assignment-4" options="-parameters" />
       <module name="student4" options="-parameters" />
+      <module name="teacher4" options="-parameters" />
     </option>
   </component>
 </project>
