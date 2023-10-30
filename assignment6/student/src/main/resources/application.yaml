@@ -3,3 +3,4 @@ spring:
     jwt:
       key: abcdefg
       expire: 7
+#debug: true
