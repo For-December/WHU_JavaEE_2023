@@ -32,6 +32,14 @@ public class JwtUtils {
     @Resource
     StringRedisTemplate template;
 
+    /**
+     * 使 token 失效
+     *
+     * @param headerToken 请求头中的 token
+     * @return boolean
+     * @author forDecember
+     * @since 2023/10/31 10:16
+     */
     public boolean invalidateJwt(String headerToken) {
         String token = this.convertToken(headerToken);
         if (token == null) return false;
@@ -68,7 +76,7 @@ public class JwtUtils {
         try {
             DecodedJWT verify = jwtVerifier.verify(token);
             // 如果已经失效了
-            if (this.invalidateJwt(verify.getId())) return null;
+            if (this.isInvalidToken(verify.getId())) return null;
             Date expiresAt = verify.getExpiresAt();
             return new Date().after(expiresAt) ? null : verify;
         } catch (JWTVerificationException e) {
