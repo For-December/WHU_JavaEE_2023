@@ -1,8 +1,10 @@
 package com.fordece.student.config;
 
 import com.fordece.student.entity.RestBean;
+import com.fordece.student.entity.dto.Account;
 import com.fordece.student.entity.vo.response.AuthorizeVO;
 import com.fordece.student.filter.JwtAuthorizeFilter;
+import com.fordece.student.service.AccountService;
 import com.fordece.student.utils.JwtUtils;
 import jakarta.annotation.Resource;
 import jakarta.servlet.ServletException;
@@ -18,6 +20,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -33,6 +36,15 @@ public class SecurityConfiguration {
 
     @Resource
     JwtAuthorizeFilter jwtAuthorizeFilter;
+
+    @Resource
+    AccountService accountService;
+
+    @Bean
+    BCryptPasswordEncoder passwordEncoder() {
+        // SpringSecurity 要求编码器，对传入的原始密码字符串加密
+        return new BCryptPasswordEncoder();
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -83,12 +95,14 @@ public class SecurityConfiguration {
             Authentication authentication) throws IOException {
         response.setContentType("application/json;charset=utf-8");
         User user = (User) authentication.getPrincipal();
-        String token = utils.createJwt(user, "小明", 1);
+        // 也可以放到 ThreadLocal 变量中————只需要查询一次数据库
+        Account account = accountService.findAccountByNameOrEmail(user.getUsername());
+        String token = utils.createJwt(user, account.getUsername(), account.getId());
         AuthorizeVO vo = new AuthorizeVO();
         vo.setExpire(utils.expireTime());
-        vo.setRole("admin");
+        vo.setRole(account.getRole());
         vo.setToken(token);
-        vo.setUsername("小明");
+        vo.setUsername(account.getUsername());
         response.getWriter().write(RestBean.success(vo).asJsonString());
 
     }

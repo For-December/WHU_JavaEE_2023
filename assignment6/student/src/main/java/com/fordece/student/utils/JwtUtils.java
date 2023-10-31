@@ -106,7 +106,7 @@ public class JwtUtils {
         return headerToken.substring(7);
     }
 
-    public String createJwt(UserDetails user, String username, int userId) {
+    public String createJwt(UserDetails user, String username, Long userId) {
         Algorithm algorithm = Algorithm.HMAC256(key);
         Date expire = this.expireTime();
         return JWT.create()
