@@ -35,7 +35,7 @@ public class JwtUtils {
     /**
      * 使 token 失效
      *
-     * @param headerToken 请求头中的 token
+     * @param headerToken 请求头中的 token+
      * @return boolean
      * @author forDecember
      * @since 2023/10/31 10:16

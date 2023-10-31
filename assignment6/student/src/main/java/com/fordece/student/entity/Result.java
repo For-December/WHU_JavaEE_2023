@@ -1,4 +1,4 @@
-package com.fordece.student.domain;
+package com.fordece.student.entity;
 
 import lombok.Data;
 

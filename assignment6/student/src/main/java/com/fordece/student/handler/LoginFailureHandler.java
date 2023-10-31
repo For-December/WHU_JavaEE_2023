@@ -2,7 +2,7 @@ package com.fordece.student.handler;
 
 import cn.hutool.json.JSONUtil;
 import com.fordece.student.CaptchaException;
-import com.fordece.student.domain.Result;
+import com.fordece.student.entity.Result;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,7 +1,7 @@
 package com.fordece.student.config;
 
-import com.fordece.student.domain.vo.response.AuthorizeVO;
 import com.fordece.student.entity.RestBean;
+import com.fordece.student.entity.vo.response.AuthorizeVO;
 import com.fordece.student.filter.JwtAuthorizeFilter;
 import com.fordece.student.utils.JwtUtils;
 import jakarta.annotation.Resource;
