@@ -50,16 +50,16 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .authorizeHttpRequests(conf -> conf
-                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/v1/auth/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(conf -> conf
-                        .loginProcessingUrl("/api/auth/login")
+                        .loginProcessingUrl("/api/v1/auth/login")
                         .successHandler(this::onAuthenticationSuccess)
                         .failureHandler(this::onAuthenticationFailure)
                 )
                 .logout(conf -> conf
-                        .logoutUrl("/api/auth/logout")
+                        .logoutUrl("/api/v1/auth/logout")
                         .logoutSuccessHandler(this::onLogoutSuccess)
                 )
                 .exceptionHandling(conf -> conf
@@ -98,11 +98,21 @@ public class SecurityConfiguration {
         // 也可以放到 ThreadLocal 变量中————只需要查询一次数据库
         Account account = accountService.findAccountByNameOrEmail(user.getUsername());
         String token = utils.createJwt(user, account.getUsername(), account.getId());
-        AuthorizeVO vo = new AuthorizeVO();
-        vo.setExpire(utils.expireTime());
-        vo.setRole(account.getRole());
-        vo.setToken(token);
-        vo.setUsername(account.getUsername());
+
+        // 和下面功能相同，但更优雅
+        AuthorizeVO vo = account.asViewObject(AuthorizeVO.class, v -> {
+            v.setToken(token);
+            v.setExpire(utils.expireTime());
+        });
+
+//        AuthorizeVO vo = new AuthorizeVO();
+//        // 此方法可以将同名字段拷贝
+//        BeanUtils.copyProperties(account, vo);
+//        vo.setToken(token);
+//        vo.setExpire(utils.expireTime());
+
+//        vo.setRole(account.getRole());
+//        vo.setUsername(account.getUsername());
         response.getWriter().write(RestBean.success(vo).asJsonString());
 
     }
