@@ -1,0 +1,18 @@
+spring:
+  security:
+    jwt:
+      key: abcdefg
+      expire: 7
+  data:
+    redis:
+      host: 192.168.226.134
+  datasource:
+    url: jdbc:mysql://localhost:3306/sukura_fox_forum
+    username: root
+    password: fy
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  reactor:
+    debug-agent:
+      enabled: true
+
+debug: true

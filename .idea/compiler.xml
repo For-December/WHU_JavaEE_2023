@@ -15,8 +15,8 @@
         <module name="teacher2" />
         <module name="student4" />
         <module name="student3" />
-        <module name="student6" />
         <module name="student5" />
+        <module name="student7" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -34,6 +34,8 @@
       <module name="student (1) (org.example)" target="17" />
       <module name="student (2)" target="17" />
       <module name="student (3)" target="17" />
+      <module name="student6 (1)" target="17" />
+      <module name="student6 (2)" target="17" />
       <module name="teacher" target="17" />
       <module name="teacher (1)" target="17" />
       <module name="teacher (1) (com.forDece)" target="17" />
@@ -49,6 +51,9 @@
       <module name="student4" options="-parameters" />
       <module name="student5" options="-parameters" />
       <module name="student6" options="-parameters" />
+      <module name="student6 (1)" options="-parameters" />
+      <module name="student6 (2)" options="-parameters" />
+      <module name="student7" options="-parameters" />
       <module name="teacher4" options="-parameters" />
       <module name="teacher5" options="-parameters" />
     </option>
